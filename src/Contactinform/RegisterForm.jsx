@@ -1,20 +1,54 @@
 import Foother from "../Component/Foother";
 import Navbar from "../Component/Navbar";
-import { Link } from 'react-router-dom'
+import { Link, } from 'react-router-dom'
 import { FcGoogle } from 'react-icons/fc'
+
+
+import { gettoken, saveuser } from "../api/auth";
+import { useContext } from "react";
+import { AuthContext } from "../Provider/AuthProvider";
+import { imageUpload } from "../api/util";
+import toast from "react-hot-toast";
+
 
 const RegisterForm = () => {
 
 
-    const HandelSubmit = (e) => {
+    const { createUser, updateUserProfile, signInWithGoogle } = useContext(AuthContext)
+    // const navigat = useNavigate();
+
+
+    const HandleSubmit = async (e) => {
         e.preventDefault()
         const form = e.target
-        const name = form.name.value;
-        const email = form.email.value;
-        const password = form.password.value;
-        const photo = form.photo.value;
-        console.log(name, password, email, photo)
+        const name = form.name.value
+        const email = form.email.value
+        const password = form.password.value
+        const image = form.image.files[0]
+        console.log(image)
+        try {
+            const imageData = await imageUpload(image)
+            const result = await createUser(email, password)
+            await updateUserProfile(name, imageData?.data.display_url)
+            await saveuser(result?.user)
+            await gettoken(result?.user?.email)
+            toast.success('success')
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
+
+    const HandleGoogle = async e => {
+        e.preventDefault()
+        try {
+            const result = await signInWithGoogle()
+            await saveuser(result?.user)
+            await gettoken(result?.user?.email)
+            toast.success('success')
+        } catch (error) {
+            console.log(error)
+        }
     }
 
 
@@ -28,7 +62,7 @@ const RegisterForm = () => {
                             <h1 className=' text-4xl font-bold'>Sign Up</h1>
                         </div>
                         <form
-                            onSubmit={HandelSubmit}
+                            onSubmit={HandleSubmit}
                             noValidate=''
                             action=''
                             className='space-y-6 ng-untouched ng-pristine ng-valid'
@@ -107,7 +141,7 @@ const RegisterForm = () => {
                             </p>
                             <div className='flex-1 h-px sm:w-16 dark:bg-gray-700'></div>
                         </div>
-                        <div className='flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer'>
+                        <div onClick={HandleGoogle} className='flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer'>
                             <FcGoogle size={32} />
                             <p>Continue with Google</p>
                         </div>

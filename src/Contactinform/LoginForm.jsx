@@ -1,15 +1,60 @@
 import { FcGoogle } from 'react-icons/fc'
 import Navbar from '../Component/Navbar';
 import Foother from '../Component/Foother';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { gettoken, saveuser } from '../api/auth';
+import { useContext } from 'react';
+import { AuthContext } from '../Provider/AuthProvider';
+import toast from 'react-hot-toast';
 
 const LoginForm = () => {
+
+
+    const { signIn, signInWithGoogle, } = useContext(AuthContext)
+    const Navigate = useNavigate()
+    const Location = useLocation();
+
+    const handleLogin = async (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+
+        const email = data.get('email')
+        const password = data.get('password')
+
+        try {
+            const result = await signIn(email, password)
+            await saveuser(result?.user)
+            await gettoken(result?.user?.email)
+            toast.success('success')
+            Navigate( "/")
+
+        } catch (error) {
+            console.log(error)
+        }
+    };
+
+    const HandleGoogle = async (e) => {
+
+        e.preventDefault()
+        try {
+            const result = await signInWithGoogle()
+            await saveuser(result?.user)
+            await gettoken(result?.user?.email)
+            toast.success('success')
+            Navigate('/')
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+
     return (
         <div className='bg-gradient-to-r from-[#6f2094] to-[#dc0b9a]'>
             <Navbar></Navbar>
 
             <div className="w-full my-24 m-auto max-w-sm p-4  border border-gray-200 rounded-lg shadow-lg sm:p-6 md:p-8 shadow-yellow-500 ">
-                <form className="space-y-6" action="#">
+                <form onSubmit={handleLogin} className="space-y-6" action="#">
                     <h5 className="text-xl font-medium text-gray-900 dark:text-white">Sign in to our platform</h5>
                     <div>
                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email :</label>
@@ -37,7 +82,7 @@ const LoginForm = () => {
                     </p>
                     <div className='flex-1 h-px sm:w-16 dark:bg-gray-700'></div>
                 </div>
-                <div className='flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer'>
+                <div onClick={HandleGoogle} className='flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer'>
                     <FcGoogle size={32} />
                     <p>Continue with Google</p>
                 </div>

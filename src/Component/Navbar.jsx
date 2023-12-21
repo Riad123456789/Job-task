@@ -1,25 +1,37 @@
-import { Link, NavLink } from "react-router-dom";
-import { BiLogoFacebook } from "react-icons/bi";
-import { SlSocialTwitter } from "react-icons/sl";
-import { FaWhatsapp } from "react-icons/fa";
-import { MdOutlineEmail } from "react-icons/md";
-import { MdPhoneForwarded } from "react-icons/md";
+import { NavLink } from "react-router-dom";
+// import { BiLogoFacebook } from "react-icons/bi";
+// import { SlSocialTwitter } from "react-icons/sl";
+// import { FaWhatsapp } from "react-icons/fa";
+// import { MdOutlineEmail } from "react-icons/md";
+// import { MdPhoneForwarded } from "react-icons/md";
+import { useContext } from "react";
+import { AuthContext } from "../Provider/AuthProvider";
 
 
 
 const Navbar = () => {
 
+    const { user, logOut } = useContext(AuthContext)
 
     const NavLinks = <>
         <NavLink to={'/'}>  <li className="font-serif text-white "><a>HOME</a></li></NavLink>
         <NavLink>  <li className="font-serif text-white "><a>ABOUT</a></li></NavLink>
         <NavLink to={'/register'}>  <li className="font-serif text-white "><a>CONTACT</a></li></NavLink>
-        <NavLink>  <li className="font-serif text-white "><a>DASHBOARD</a></li></NavLink>
+       {
+        user?  <NavLink to={'/dashboard'}>  <li className="font-serif text-white "><a>DASHBOARD</a></li></NavLink>
+        :
+        ""
+       }
     </>
 
 
+    const handleLogout = () => {
+        logOut()
+            .then()
+            .catch()
+    };
 
-
+    console.log(user)
     return (
         <>
             {/* <div className="  md:flex justify-between px-5 bg-gradient-to-r from-[#65205a] to-[#3c0480]">
@@ -63,13 +75,29 @@ const Navbar = () => {
                     </ul>
                 </div>
                 <div className="navbar-end">
-                    <div className="avatar">
-                        <div className="w-10 rounded-full">
-                            <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
-                        </div>
-                    </div>
+                   
+                    {
+                        user?.photoURL ?
+
+                            <div className="avatar border p-1 rounded-full">
+                                <div className="w-9 rounded-full ">
+                                    <img  src={user?.photoURL} />
+                                </div>
+                            </div>
+                            :
+                            <div className="avatar">
+                                <div className="w-10 rounded-full">
+                                    <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                                </div>
+                            </div>
+                    }
                     <div className="pl-2">
-                        <Link to={'/login'}><button className="btn btn-sm btn-outline text-white">LOGIN</button></Link>
+                        {
+                            user ? <button onClick={handleLogout} className="btn btn-sm btn-outline border text-white">SING OUT</button>
+                                :
+                                // 
+                                ""
+                        }
                     </div>
                 </div>
             </div>
