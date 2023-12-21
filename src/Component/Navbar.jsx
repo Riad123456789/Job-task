@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { BiLogoFacebook } from "react-icons/bi";
 import { SlSocialTwitter } from "react-icons/sl";
 import { FaWhatsapp } from "react-icons/fa";
@@ -11,9 +11,9 @@ const Navbar = () => {
 
 
     const NavLinks = <>
-        <NavLink>  <li className="font-serif text-white "><a>HOME</a></li></NavLink>
+        <NavLink to={'/'}>  <li className="font-serif text-white "><a>HOME</a></li></NavLink>
         <NavLink>  <li className="font-serif text-white "><a>ABOUT</a></li></NavLink>
-        <NavLink>  <li className="font-serif text-white "><a>CONTACT</a></li></NavLink>
+        <NavLink to={'/register'}>  <li className="font-serif text-white "><a>CONTACT</a></li></NavLink>
         <NavLink>  <li className="font-serif text-white "><a>DASHBOARD</a></li></NavLink>
     </>
 
@@ -55,7 +55,7 @@ const Navbar = () => {
                             {NavLinks}
                         </ul>
                     </div>
-                    <a className="btn btn-ghost text-xl text-white">Task Management</a>
+                    <a className="btn btn-ghost text-lg md:text-xl text-white">Task Management</a>
                 </div>
                 <div className="navbar-center hidden lg:flex">
                     <ul className="menu menu-horizontal px-1">
@@ -69,11 +69,11 @@ const Navbar = () => {
                         </div>
                     </div>
                     <div className="pl-2">
-                        <button className="btn btn-sm btn-outline text-white">LOGIN</button>
+                        <Link to={'/login'}><button className="btn btn-sm btn-outline text-white">LOGIN</button></Link>
                     </div>
                 </div>
             </div>
-     
+
         </>
     );
 };

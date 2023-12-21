@@ -76,7 +76,7 @@ const Foother = () => {
                 </div>
                 <div >
                     <div className="px-4 bg-slate-900 py-6 dark:bg-gray-700 text-center ">
-                        <span className="text-sm text-white  text-center">© 2023 <a href="https://flowbite.com/">Matrimony™</a>. All Rights Reserved.
+                        <span className="text-sm text-white  text-center">© 2023 <a href="">Task Management™</a>. All Rights Reserved.
                         </span>
                     </div>
                 </div>
