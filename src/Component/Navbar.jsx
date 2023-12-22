@@ -18,7 +18,7 @@ const Navbar = () => {
         <NavLink>  <li className="font-serif text-white "><a>ABOUT</a></li></NavLink>
         <NavLink to={'/register'}>  <li className="font-serif text-white "><a>CONTACT</a></li></NavLink>
        {
-        user?  <NavLink to={'/dashboard'}>  <li className="font-serif text-white "><a>DASHBOARD</a></li></NavLink>
+        user?  <NavLink to={'/dashboard/createTask'}>  <li className="font-serif text-white "><a>DASHBOARD</a></li></NavLink>
         :
         ""
        }
